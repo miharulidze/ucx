@@ -40,7 +40,7 @@ stages:
             fetchDepth: 1
 
           - bash: |
-              set -x
+              set -xeE
               mkdir -p $(WorkDir)
               mv $(Build.SourcesDirectory)/* $(WorkDir)    
             displayName: Prepare WorkDir with code
@@ -96,7 +96,7 @@ stages:
               pip3 install -q -r requirements.txt
               module load /hpc/local/etc/modulefiles/hpcx-gcc
 
-              set -o pipefail; set -x
+              set -xeE -o pipefail
               python3 -u perfx.py \
                 --config ucx-rdmz.yml \
                 --before "$SHA_Before" \
