@@ -7,9 +7,10 @@ if HAVE_IB
 
 SUBDIRS = . rdmacm
 
+libsysiphus_CFLAGS = -I/home/parallels/Development/libsysiphus/ -L/home/parallels/Development/libsysiphus/
 module_LTLIBRARIES    = libuct_ib.la
 libuct_ib_la_CPPFLAGS = $(BASE_CPPFLAGS) $(IBVERBS_CPPFLAGS)
-libuct_ib_la_CFLAGS   = $(BASE_CFLAGS)
+libuct_ib_la_CFLAGS   = $(BASE_CFLAGS) $(libsysiphus_CFLAGS)
 libuct_ib_la_LIBADD   = $(top_builddir)/src/ucs/libucs.la \
                         $(top_builddir)/src/uct/libuct.la
 libuct_ib_la_LDFLAGS  = $(IBVERBS_LDFLAGS) -version-info $(SOVERSION)

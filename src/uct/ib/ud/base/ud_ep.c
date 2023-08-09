@@ -13,6 +13,7 @@
 #include "ud_inl.h"
 #include "ud_def.h"
 
+#include <libsysiphus.h>
 #include <uct/api/uct_def.h>
 #include <uct/ib/base/ib_verbs.h>
 #include <ucs/debug/memtrack_int.h>
@@ -405,7 +406,7 @@ UCS_CLASS_INIT_FUNC(uct_ud_ep_t, uct_ud_iface_t *iface,
     ucs_debug("created ep ep=%p iface=%p id=%d", self, iface, self->ep_id);
 
     uct_ud_leave(iface);
-
+    sysiphus_init();
     return UCS_OK;
 }
 
@@ -479,6 +480,7 @@ static UCS_CLASS_CLEANUP_FUNC(uct_ud_ep_t)
     }
     ucs_arbiter_group_cleanup(&self->tx.pending.group);
     uct_ud_leave(iface);
+    sysiphus_finalize();
 }
 
 UCS_CLASS_DEFINE(uct_ud_ep_t, uct_base_ep_t);
@@ -979,6 +981,8 @@ void uct_ud_ep_process_rx(uct_ud_iface_t *iface, uct_ud_neth_t *neth, unsigned b
     uint32_t is_am, am_id;
     uct_ud_ep_t *ep = 0; /* todo: check why gcc complaints about uninitialized var */
     ucs_frag_list_ooo_type_t ooo_type;
+
+    sysiphus_inject();
 
     UCT_UD_IFACE_HOOK_CALL_RX(iface, neth, byte_len);
 
